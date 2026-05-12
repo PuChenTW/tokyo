@@ -16,27 +16,62 @@ header{background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-i
 .back-btn{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#0d9488;padding:6px 12px;border-radius:8px;border:1px solid #99f6e4;background:#f0fdfa;transition:background .15s}
 .back-btn:hover{background:#ccfbf1}
 
-main{max-width:640px;margin:0 auto;padding:16px 12px}
+main{max-width:640px;margin:0 auto;padding:16px 12px;display:flex;flex-direction:column;gap:12px}
 
-.card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
-.card-header{padding:16px 16px 12px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between}
-.card-title{font-size:15px;font-weight:700;color:#0f172a;display:flex;align-items:center;gap:8px}
-.prog-label{font-size:12px;color:#94a3b8}
+/* Add form */
+.add-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:14px 16px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.add-row{display:flex;gap:8px;align-items:stretch}
+.add-input{flex:1;padding:10px 12px;border:1px solid #e2e8f0;border-radius:10px;font-size:14px;color:#1e293b;outline:none;transition:border-color .15s;min-width:0}
+.add-input:focus{border-color:#0d9488;box-shadow:0 0 0 2px rgba(13,148,136,.12)}
+.add-input::placeholder{color:#94a3b8}
+.add-cat{padding:10px 8px;border:1px solid #e2e8f0;border-radius:10px;font-size:13px;color:#1e293b;background:#fff;outline:none;cursor:pointer;flex-shrink:0;transition:border-color .15s}
+.add-cat:focus{border-color:#0d9488}
+.add-btn{padding:10px 16px;background:#0d9488;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:background .15s;white-space:nowrap;flex-shrink:0}
+.add-btn:hover{background:#0f766e}
+.add-btn:active{background:#115e59}
+
+/* List card */
+.list-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.card-header{padding:12px 16px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.card-title{font-size:15px;font-weight:700;color:#0f172a;display:flex;align-items:center;gap:6px}
+.clear-btn{font-size:12px;color:#94a3b8;background:none;border:1px solid #e2e8f0;border-radius:6px;padding:4px 9px;cursor:pointer;transition:color .15s,border-color .15s}
+.clear-btn:hover{color:#f43f5e;border-color:#fecdd3}
+.prog-wrap{text-align:right;flex-shrink:0}
+.prog-label{font-size:11px;color:#94a3b8}
 .prog-val{font-size:13px;font-weight:700;color:#0d9488}
 
-.item-list{padding:8px 0}
-.item-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid #f8fafc;transition:background .1s}
+/* Items */
+.item-list{padding:4px 0}
+.empty-msg{padding:28px 16px;text-align:center;font-size:13px;color:#94a3b8}
+
+.item-row{display:flex;align-items:center;gap:10px;padding:11px 12px 11px 14px;border-bottom:1px solid #f8fafc;transition:background .1s}
 .item-row:last-child{border-bottom:none}
 .item-row:hover{background:#fafcff}
+
 .check-btn{flex-shrink:0;background:none;border:none;cursor:pointer;padding:0;line-height:0}
-.check-circle{width:26px;height:26px;border-radius:50%;border:2px solid #e2e8f0;display:flex;align-items:center;justify-content:center;background:#fff;transition:border-color .15s,background .15s}
+.check-circle{width:24px;height:24px;border-radius:50%;border:2px solid #e2e8f0;display:flex;align-items:center;justify-content:center;background:#fff;transition:border-color .15s,background .15s}
 .check-circle:hover{border-color:#cbd5e1}
 .check-circle.checked{border-color:#0d9488;background:#0d9488}
-.check-circle.checked::after{content:"✓";color:#fff;font-size:13px;font-weight:700}
-.item-name{font-size:14px;font-weight:500;color:#1e293b;transition:opacity .2s}
-.item-name.done{opacity:.35;text-decoration:line-through;text-decoration-color:#cbd5e1}
+.check-circle.checked::after{content:"✓";color:#fff;font-size:12px;font-weight:700}
 
-.footer{font-size:11px;color:#94a3b8;text-align:center;padding:16px 0 4px}
+.cat-badge{flex-shrink:0;font-size:10px;font-weight:600;padding:2px 7px;border-radius:99px;white-space:nowrap}
+.cat-衣物{background:#faf5ff;color:#a855f7;border:1px solid #e9d5ff}
+.cat-咖啡{background:#fffbeb;color:#92400e;border:1px solid #fde68a}
+.cat-藥妝{background:#fff1f2;color:#f43f5e;border:1px solid #fecdd3}
+.cat-食品{background:#fff7ed;color:#f97316;border:1px solid #fed7aa}
+.cat-雜貨{background:#ecfeff;color:#0891b2;border:1px solid #a5f3fc}
+.cat-其他{background:#f8fafc;color:#64748b;border:1px solid #e2e8f0}
+
+.item-name{flex:1;font-size:14px;font-weight:500;color:#1e293b;min-width:0;word-break:break-all;line-height:1.4}
+.item-name.done{opacity:.35;text-decoration:line-through;text-decoration-color:#cbd5e1}
+.item-edit-input{flex:1;padding:4px 8px;border:1px solid #0d9488;border-radius:6px;font-size:14px;color:#1e293b;outline:none;background:#f0fdfa;min-width:0}
+
+.row-actions{display:flex;gap:2px;flex-shrink:0}
+.action-btn{background:none;border:none;cursor:pointer;padding:5px 6px;border-radius:6px;font-size:14px;line-height:1;color:#94a3b8;transition:color .15s,background .15s}
+.action-btn:hover{background:#f1f5f9;color:#475569}
+.action-btn.del:hover{background:#fff1f2;color:#f43f5e}
+
+.footer{font-size:11px;color:#94a3b8;text-align:center;padding:8px 0 4px}
 </style>
 </head>
 <body>
@@ -52,76 +87,230 @@ main{max-width:640px;margin:0 auto;padding:16px 12px}
 </header>
 
 <main>
-  <div class="card">
+  <div class="add-card">
+    <div class="add-row">
+      <input class="add-input" id="add-input" type="text" placeholder="新增品項…" maxlength="80" autocomplete="off">
+      <select class="add-cat" id="add-cat">
+        <option value="其他">其他</option>
+        <option value="衣物">衣物</option>
+        <option value="咖啡">咖啡</option>
+        <option value="藥妝">藥妝</option>
+        <option value="食品">食品</option>
+        <option value="雜貨">雜貨</option>
+      </select>
+      <button class="add-btn" id="add-btn">＋ 加入</button>
+    </div>
+  </div>
+
+  <div class="list-card">
     <div class="card-header">
       <div class="card-title">🛍 待買清單</div>
-      <div style="text-align:right">
+      <button class="clear-btn" id="clear-btn" title="刪除所有已購入項目">清除已買</button>
+      <div class="prog-wrap">
         <div class="prog-label">已購入</div>
         <div class="prog-val" id="prog-text">0 / 0</div>
       </div>
     </div>
     <div class="item-list" id="list"></div>
   </div>
-  <div class="footer">點擊圓圈標記已購入</div>
+  <p class="footer">點擊圓圈標記已購入</p>
 </main>
 
 <script>
-const items = [
-  "長褲",
-  "襯衫",
-  "耳機",
-  "香氛",
-  "睡眠噴霧",
-];
+const DB_NAME = 'tokyo-shopping';
+const DB_VER = 1;
+const STORE_NAME = 'items';
+let db;
 
-const KEY = "shopping_checked";
-const checked = new Set(JSON.parse(localStorage.getItem(KEY) || "[]"));
-
-function save() {
-  localStorage.setItem(KEY, JSON.stringify([...checked]));
+function openDB() {
+  return new Promise((res, rej) => {
+    const r = indexedDB.open(DB_NAME, DB_VER);
+    r.onupgradeneeded = e => {
+      const d = e.target.result;
+      if (!d.objectStoreNames.contains(STORE_NAME)) {
+        d.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
+      }
+    };
+    r.onsuccess = e => { db = e.target.result; res(); };
+    r.onerror = e => rej(e.target.error);
+  });
 }
+
+function st(mode) { return db.transaction(STORE_NAME, mode).objectStore(STORE_NAME); }
+
+function dbGetAll() {
+  return new Promise((res, rej) => {
+    const r = st('readonly').getAll();
+    r.onsuccess = e => res(e.target.result);
+    r.onerror = e => rej(e.target.error);
+  });
+}
+
+function dbAdd(item) {
+  return new Promise((res, rej) => {
+    const r = st('readwrite').add(item);
+    r.onsuccess = e => res(e.target.result);
+    r.onerror = e => rej(e.target.error);
+  });
+}
+
+function dbPut(item) {
+  return new Promise((res, rej) => {
+    const r = st('readwrite').put(item);
+    r.onsuccess = () => res();
+    r.onerror = e => rej(e.target.error);
+  });
+}
+
+function dbDelete(id) {
+  return new Promise((res, rej) => {
+    const r = st('readwrite').delete(id);
+    r.onsuccess = () => res();
+    r.onerror = e => rej(e.target.error);
+  });
+}
+
+let items = [];
 
 function updateProg() {
-  document.getElementById("prog-text").textContent = `${checked.size} / ${items.length}`;
+  const done = items.filter(i => i.checked).length;
+  document.getElementById('prog-text').textContent = `${done} / ${items.length}`;
 }
 
-const list = document.getElementById("list");
-items.forEach((name, i) => {
-  const row = document.createElement("div");
-  row.className = "item-row";
+function sorted() {
+  return [...items].sort((a, b) => {
+    if (a.checked !== b.checked) return a.checked ? 1 : -1;
+    return a.order - b.order;
+  });
+}
 
-  const btn = document.createElement("button");
-  btn.className = "check-btn";
-  btn.setAttribute("aria-label", `標記 ${name}`);
+async function render() {
+  items = await dbGetAll();
+  const list = document.getElementById('list');
+  const arr = sorted();
 
-  const circle = document.createElement("div");
-  circle.className = "check-circle" + (checked.has(i) ? " checked" : "");
-  btn.appendChild(circle);
-
-  const label = document.createElement("div");
-  label.className = "item-name" + (checked.has(i) ? " done" : "");
-  label.textContent = name;
-
-  btn.addEventListener("click", () => {
-    if (checked.has(i)) {
-      checked.delete(i);
-      circle.classList.remove("checked");
-      label.classList.remove("done");
-    } else {
-      checked.add(i);
-      circle.classList.add("checked");
-      label.classList.add("done");
-    }
-    save();
+  if (arr.length === 0) {
+    list.innerHTML = '<div class="empty-msg">還沒有項目，從上方輸入後按加入 ☝</div>';
     updateProg();
+    return;
+  }
+
+  list.innerHTML = '';
+  arr.forEach(item => {
+    const row = document.createElement('div');
+    row.className = 'item-row';
+
+    const checkBtn = document.createElement('button');
+    checkBtn.className = 'check-btn';
+    checkBtn.setAttribute('aria-label', `標記 ${item.name}`);
+    const circle = document.createElement('div');
+    circle.className = 'check-circle' + (item.checked ? ' checked' : '');
+    checkBtn.appendChild(circle);
+    checkBtn.addEventListener('click', () => toggleCheck(item.id));
+
+    const badge = document.createElement('span');
+    badge.className = `cat-badge cat-${item.category}`;
+    badge.textContent = item.category;
+
+    const nameEl = document.createElement('div');
+    nameEl.className = 'item-name' + (item.checked ? ' done' : '');
+    nameEl.textContent = item.name;
+
+    const actions = document.createElement('div');
+    actions.className = 'row-actions';
+
+    const editBtn = document.createElement('button');
+    editBtn.className = 'action-btn edit';
+    editBtn.textContent = '✏️';
+    editBtn.title = '編輯';
+    editBtn.addEventListener('click', () => startEdit(item, nameEl));
+
+    const delBtn = document.createElement('button');
+    delBtn.className = 'action-btn del';
+    delBtn.textContent = '🗑';
+    delBtn.title = '刪除';
+    delBtn.addEventListener('click', () => removeItem(item.id));
+
+    actions.appendChild(editBtn);
+    actions.appendChild(delBtn);
+    row.appendChild(checkBtn);
+    row.appendChild(badge);
+    row.appendChild(nameEl);
+    row.appendChild(actions);
+    list.appendChild(row);
   });
 
-  row.appendChild(btn);
-  row.appendChild(label);
-  list.appendChild(row);
-});
+  updateProg();
+}
 
-updateProg();
+function startEdit(item, nameEl) {
+  const input = document.createElement('input');
+  input.className = 'item-edit-input';
+  input.type = 'text';
+  input.value = item.name;
+  input.maxLength = 80;
+  nameEl.replaceWith(input);
+  input.focus();
+  input.select();
+
+  let saved = false;
+  const save = async () => {
+    if (saved) return;
+    saved = true;
+    const newName = input.value.trim();
+    if (newName && newName !== item.name) {
+      item.name = newName;
+      await dbPut(item);
+    }
+    render();
+  };
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); save(); }
+    if (e.key === 'Escape') { saved = true; render(); }
+  });
+  input.addEventListener('blur', save);
+}
+
+async function toggleCheck(id) {
+  const item = items.find(i => i.id === id);
+  if (!item) return;
+  item.checked = !item.checked;
+  await dbPut(item);
+  render();
+}
+
+async function removeItem(id) {
+  await dbDelete(id);
+  render();
+}
+
+async function addItem() {
+  const input = document.getElementById('add-input');
+  const catEl = document.getElementById('add-cat');
+  const name = input.value.trim();
+  if (!name) { input.focus(); return; }
+  await dbAdd({ name, category: catEl.value, checked: false, order: Date.now() });
+  input.value = '';
+  input.focus();
+  render();
+}
+
+async function clearChecked() {
+  const checked = items.filter(i => i.checked);
+  if (checked.length === 0) return;
+  if (!confirm(`刪除 ${checked.length} 個已購入項目？`)) return;
+  await Promise.all(checked.map(i => dbDelete(i.id)));
+  render();
+}
+
+document.getElementById('add-btn').addEventListener('click', addItem);
+document.getElementById('add-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') addItem();
+});
+document.getElementById('clear-btn').addEventListener('click', clearChecked);
+
+openDB().then(render);
 </script>
 </body>
 </html>
