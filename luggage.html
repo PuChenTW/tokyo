@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>購物清單</title>
+<title>行李清單</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f8fafc;color:#1e293b;padding-bottom:60px}
@@ -18,7 +18,6 @@ header{background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-i
 
 main{max-width:640px;margin:0 auto;padding:16px 12px;display:flex;flex-direction:column;gap:12px}
 
-/* Add form */
 .add-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:14px 16px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
 .add-row{display:flex;gap:8px;align-items:stretch}
 .add-input{flex:1;padding:10px 12px;border:1px solid #e2e8f0;border-radius:10px;font-size:14px;color:#1e293b;outline:none;transition:border-color .15s;min-width:0}
@@ -30,7 +29,6 @@ main{max-width:640px;margin:0 auto;padding:16px 12px;display:flex;flex-direction
 .add-btn:hover{background:#0f766e}
 .add-btn:active{background:#115e59}
 
-/* List card */
 .list-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
 .card-header{padding:12px 16px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;gap:8px}
 .card-title{font-size:15px;font-weight:700;color:#0f172a;display:flex;align-items:center;gap:6px}
@@ -40,7 +38,6 @@ main{max-width:640px;margin:0 auto;padding:16px 12px;display:flex;flex-direction
 .prog-label{font-size:11px;color:#94a3b8}
 .prog-val{font-size:13px;font-weight:700;color:#0d9488}
 
-/* Items */
 .item-list{padding:4px 0}
 .empty-msg{padding:28px 16px;text-align:center;font-size:13px;color:#94a3b8}
 
@@ -55,11 +52,11 @@ main{max-width:640px;margin:0 auto;padding:16px 12px;display:flex;flex-direction
 .check-circle.checked::after{content:"✓";color:#fff;font-size:12px;font-weight:700}
 
 .cat-badge{flex-shrink:0;font-size:10px;font-weight:600;padding:2px 7px;border-radius:99px;white-space:nowrap}
+.cat-證件{background:#eff6ff;color:#3b82f6;border:1px solid #bfdbfe}
 .cat-衣物{background:#faf5ff;color:#a855f7;border:1px solid #e9d5ff}
-.cat-咖啡{background:#fffbeb;color:#92400e;border:1px solid #fde68a}
-.cat-藥妝{background:#fff1f2;color:#f43f5e;border:1px solid #fecdd3}
-.cat-食品{background:#fff7ed;color:#f97316;border:1px solid #fed7aa}
-.cat-雜貨{background:#ecfeff;color:#0891b2;border:1px solid #a5f3fc}
+.cat-3C{background:#f0fdfa;color:#0d9488;border:1px solid #99f6e4}
+.cat-藥品{background:#fff1f2;color:#f43f5e;border:1px solid #fecdd3}
+.cat-盥洗{background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0}
 .cat-其他{background:#f8fafc;color:#64748b;border:1px solid #e2e8f0}
 
 .item-name{flex:1;font-size:14px;font-weight:500;color:#1e293b;min-width:0;word-break:break-all;line-height:1.4}
@@ -80,7 +77,7 @@ main{max-width:640px;margin:0 auto;padding:16px 12px;display:flex;flex-direction
 <header>
   <div class="hinner">
     <div>
-      <div class="htitle">購物清單</div>
+      <div class="htitle">🧳 行李清單</div>
       <div class="hsub">東京・茨城旅程</div>
     </div>
     <a href="index.html" class="back-btn">← 回行程</a>
@@ -90,14 +87,14 @@ main{max-width:640px;margin:0 auto;padding:16px 12px;display:flex;flex-direction
 <main>
   <div class="add-card">
     <div class="add-row">
-      <input class="add-input" id="add-input" type="text" placeholder="新增品項…" maxlength="80" autocomplete="off">
+      <input class="add-input" id="add-input" type="text" placeholder="新增行李項目…" maxlength="80" autocomplete="off">
       <select class="add-cat" id="add-cat">
-        <option value="其他">其他</option>
+        <option value="證件">證件</option>
         <option value="衣物">衣物</option>
-        <option value="咖啡">咖啡</option>
-        <option value="藥妝">藥妝</option>
-        <option value="食品">食品</option>
-        <option value="雜貨">雜貨</option>
+        <option value="3C">3C</option>
+        <option value="藥品">藥品</option>
+        <option value="盥洗">盥洗</option>
+        <option value="其他">其他</option>
       </select>
       <button class="add-btn" id="add-btn">＋ 加入</button>
     </div>
@@ -105,24 +102,63 @@ main{max-width:640px;margin:0 auto;padding:16px 12px;display:flex;flex-direction
 
   <div class="list-card">
     <div class="card-header">
-      <div class="card-title">🛍 待買清單</div>
-      <button class="clear-btn" id="clear-btn" title="刪除所有已購入項目">清除已買</button>
+      <div class="card-title">🧳 待備清單</div>
+      <button class="clear-btn" id="clear-btn" title="刪除所有已備妥項目">清除已備</button>
       <div class="prog-wrap">
-        <div class="prog-label">已購入</div>
+        <div class="prog-label">已備妥</div>
         <div class="prog-val" id="prog-text">0 / 0</div>
       </div>
     </div>
     <div class="item-list" id="list"></div>
   </div>
-  <p class="footer">點擊圓圈標記已購入</p>
+  <p class="footer">點擊圓圈標記已備妥；點擊 ✏️ 可同時修改名稱與分類</p>
 </main>
 
 <script>
-const CATEGORIES = ['其他','衣物','咖啡','藥妝','食品','雜貨'];
-const DB_NAME = 'tokyo-shopping';
+const DB_NAME = 'tokyo-luggage';
 const DB_VER = 1;
 const STORE_NAME = 'items';
+const CATEGORIES = ['證件','衣物','3C','藥品','盥洗','其他'];
 let db;
+
+const DEFAULTS = [
+  {name:'護照',category:'證件'},
+  {name:'駕照日文譯本（或國際駕照）',category:'證件'},
+  {name:'信用卡（Visa / MasterCard）',category:'證件'},
+  {name:'日幣現金',category:'證件'},
+  {name:'旅遊保險文件',category:'證件'},
+  {name:'電子機票確認單',category:'證件'},
+  {name:'短袖上衣 ×4',category:'衣物'},
+  {name:'薄外套 / 罩衫',category:'衣物'},
+  {name:'長褲 ×2',category:'衣物'},
+  {name:'輕便摺疊傘',category:'衣物'},
+  {name:'內衣褲 ×6',category:'衣物'},
+  {name:'舒適步行鞋',category:'衣物'},
+  {name:'夾腳拖 / 室內拖',category:'衣物'},
+  {name:'睡衣',category:'衣物'},
+  {name:'手機充電器',category:'3C'},
+  {name:'行動電源',category:'3C'},
+  {name:'轉接插頭（日本A型兩孔扁插）',category:'3C'},
+  {name:'相機＋記憶卡',category:'3C'},
+  {name:'耳機',category:'3C'},
+  {name:'個人常備藥',category:'藥品'},
+  {name:'感冒藥',category:'藥品'},
+  {name:'胃腸藥',category:'藥品'},
+  {name:'止痛藥',category:'藥品'},
+  {name:'OK繃',category:'藥品'},
+  {name:'暈車藥',category:'藥品'},
+  {name:'牙刷牙膏',category:'盥洗'},
+  {name:'洗髮精＋潤髮乳',category:'盥洗'},
+  {name:'沐浴乳',category:'盥洗'},
+  {name:'刮鬍刀',category:'盥洗'},
+  {name:'基礎保養品',category:'盥洗'},
+  {name:'防曬乳 SPF50+',category:'盥洗'},
+  {name:'面膜',category:'盥洗'},
+  {name:'行李箱鎖',category:'其他'},
+  {name:'環保購物袋',category:'其他'},
+  {name:'旅行頸枕',category:'其他'},
+  {name:'濕紙巾',category:'其他'},
+];
 
 function openDB() {
   return new Promise((res, rej) => {
@@ -331,7 +367,7 @@ async function addItem() {
 async function clearChecked() {
   const checked = items.filter(i => i.checked);
   if (checked.length === 0) return;
-  if (!confirm(`刪除 ${checked.length} 個已購入項目？`)) return;
+  if (!confirm(`刪除 ${checked.length} 個已備妥項目？`)) return;
   await Promise.all(checked.map(i => dbDelete(i.id)));
   render();
 }
@@ -342,7 +378,16 @@ document.getElementById('add-input').addEventListener('keydown', e => {
 });
 document.getElementById('clear-btn').addEventListener('click', clearChecked);
 
-openDB().then(render);
+openDB().then(async () => {
+  const existing = await dbGetAll();
+  if (existing.length === 0) {
+    let t = Date.now();
+    for (const d of DEFAULTS) {
+      await dbAdd({ ...d, checked: false, order: t++ });
+    }
+  }
+  render();
+});
 </script>
 </body>
 </html>

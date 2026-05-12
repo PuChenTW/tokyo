@@ -15,12 +15,6 @@ header{background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-i
 .htitle{font-size:17px;font-weight:700;color:#0f172a}
 .hsub{font-size:11px;color:#94a3b8;margin-top:2px}
 .hright{display:flex;align-items:center;gap:12px}
-.hcount{text-align:right}
-.hcount p:first-child{font-size:11px;color:#94a3b8}
-.hcount p:last-child{font-size:13px;font-weight:700;color:#0d9488}
-.ring{width:40px;height:40px;background:#f1f5f9;border-radius:50%;display:flex;align-items:center;justify-content:center}
-.ring svg{width:32px;height:32px;transform:rotate(-90deg)}
-
 /* Main */
 main{max-width:640px;margin:0 auto;padding:16px 12px;display:flex;flex-direction:column;gap:12px}
 
@@ -33,7 +27,6 @@ main{max-width:640px;margin:0 auto;padding:16px 12px;display:flex;flex-direction
 .day-label{font-size:11px;font-weight:700;color:#0d9488;text-transform:uppercase}
 .day-date{font-size:12px;font-weight:600;color:#475569}
 .day-title{font-size:13px;font-weight:600;color:#1e293b;line-height:1.4}
-.day-prog{font-size:11px;color:#94a3b8;margin-top:2px}
 .day-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
 .chevron{font-size:16px;color:#94a3b8;transition:transform .2s}
 .chevron.open{transform:rotate(180deg)}
@@ -60,14 +53,7 @@ main{max-width:640px;margin:0 auto;padding:16px 12px;display:flex;flex-direction
 /* Timeline */
 .timeline{padding:14px 16px 8px}
 .task-row{display:flex;gap:10px;position:relative;margin-bottom:0}
-.task-row:not(:last-child)::before{content:"";position:absolute;left:15px;top:32px;bottom:-8px;width:1px;background:#f1f5f9;z-index:0}
-.task-check{flex-shrink:0;background:none;border:none;cursor:pointer;padding:0;margin-top:4px;position:relative;z-index:1;line-height:0}
-.check-circle{width:24px;height:24px;border-radius:50%;border:2px solid #e2e8f0;display:flex;align-items:center;justify-content:center;background:#fff;transition:border-color .15s}
-.check-circle:hover{border-color:#cbd5e1}
-.check-circle.checked{border-color:#0d9488;background:#0d9488}
-.check-circle.checked::after{content:"✓";color:#fff;font-size:13px;font-weight:700}
-.task-content{flex:1;padding-bottom:14px;transition:opacity .2s}
-.task-content.done{opacity:.4}
+.task-content{flex:1;padding-bottom:14px}
 .task-meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:4px}
 .task-time{font-family:monospace;font-size:11px;color:#94a3b8;width:110px;flex-shrink:0}
 .task-icon{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
@@ -118,18 +104,8 @@ main{max-width:640px;margin:0 auto;padding:16px 12px;display:flex;flex-direction
       <div class="hsub">2026 / 05/14 – 05/19</div>
     </div>
     <div class="hright">
+      <a href="luggage.html" style="display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#0d9488;padding:6px 12px;border-radius:8px;border:1px solid #99f6e4;background:#f0fdfa;">🧳 行李</a>
       <a href="shopping.html" style="display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#a855f7;padding:6px 12px;border-radius:8px;border:1px solid #e9d5ff;background:#faf5ff;">🛍 購物</a>
-      <div class="hcount">
-        <p>完成進度</p>
-        <p id="prog-text">0 / 0</p>
-      </div>
-      <div class="ring">
-        <svg viewBox="0 0 36 36">
-          <circle cx="18" cy="18" r="14" fill="none" stroke="#e2e8f0" stroke-width="4"/>
-          <circle id="ring-circle" cx="18" cy="18" r="14" fill="none" stroke="#0d9488" stroke-width="4"
-            stroke-dasharray="0 88" stroke-linecap="round"/>
-        </svg>
-      </div>
     </div>
   </div>
 </header>
@@ -268,16 +244,6 @@ const ICONS = {
   nature:"🌲", sunset:"🌅"
 };
 
-let doneSet = new Set();
-let totalTasks = days.reduce((s,d)=>s+d.tasks.length,0);
-
-function updateProgress(){
-  const c = doneSet.size;
-  document.getElementById('prog-text').textContent = `${c} / ${totalTasks}`;
-  const pct = Math.round(c/totalTasks*100);
-  document.getElementById('ring-circle').setAttribute('stroke-dasharray',`${pct*0.88} 88`);
-}
-
 function renderDays(){
   const main = document.getElementById('main');
   main.innerHTML = '';
@@ -310,10 +276,7 @@ function renderDays(){
       const isLast = i===day.tasks.length-1;
       const notes = t.notes.map(n=>`<li>${n}</li>`).join('');
       return `
-        <div class="task-row" id="row-${t.id}" style="${isLast?'':''}">
-          <button class="task-check" onclick="toggleTask('${t.id}','${day.id}')" aria-label="切換完成">
-            <div class="check-circle" id="chk-${t.id}"></div>
-          </button>
+        <div class="task-row" id="row-${t.id}">
           <div class="task-content" id="tc-${t.id}">
             <div class="task-meta">
               <span class="task-time">${t.time}</span>
@@ -337,11 +300,9 @@ function renderDays(){
           </div>
           <div>
             <div class="day-title" id="dt-${day.id}">${day.title}</div>
-            <div class="day-prog" id="dp-${day.id}">0/${day.tasks.length} 完成</div>
           </div>
         </div>
         <div class="day-right">
-          <span id="di-${day.id}"></span>
           <span class="chevron" id="chev-${day.id}">▼</span>
         </div>
       </button>
@@ -363,9 +324,6 @@ function renderDays(){
   // Open day 1 by default
   document.getElementById(`body-1`).classList.add('open');
   document.getElementById(`chev-1`).classList.add('open');
-
-  updateDayProgress();
-  updateProgress();
 }
 
 function toggleDay(id){
@@ -387,38 +345,6 @@ function toggleExtra(id){
   const c = document.getElementById(`extra-chev-${id}`);
   g.classList.toggle('open');
   c.textContent = g.classList.contains('open') ? '▲' : '▼';
-}
-
-function toggleTask(tid, did){
-  const chk = document.getElementById(`chk-${tid}`);
-  const tc  = document.getElementById(`tc-${tid}`);
-  if(doneSet.has(tid)){
-    doneSet.delete(tid);
-    chk.classList.remove('checked');
-    tc.classList.remove('done');
-  } else {
-    doneSet.add(tid);
-    chk.classList.add('checked');
-    tc.classList.add('done');
-  }
-  updateDayProgress();
-  updateProgress();
-}
-
-function updateDayProgress(){
-  days.forEach(day=>{
-    const ids = day.tasks.map(t=>t.id);
-    const done = ids.filter(id=>doneSet.has(id)).length;
-    const all = done===ids.length;
-    document.getElementById(`dp-${day.id}`).textContent=`${done}/${ids.length} 完成`;
-    const dt = document.getElementById(`dt-${day.id}`);
-    const dlb = document.getElementById(`dlb-${day.id}`);
-    dt.style.textDecoration = all ? 'line-through' : '';
-    dt.style.opacity = all ? '0.5' : '';
-    dlb.style.opacity = all ? '0.4' : '';
-    const di = document.getElementById(`di-${day.id}`);
-    di.textContent = all ? '✅' : '';
-  });
 }
 
 // Footer
