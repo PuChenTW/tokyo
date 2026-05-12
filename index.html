@@ -4,21 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>東京・茨城 6 日旅程</title>
+<link rel="stylesheet" href="style.css">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f8fafc;color:#1e293b;padding-bottom:60px}
-a{color:inherit;text-decoration:none}
-
-/* Header */
-header{background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:20;box-shadow:0 1px 3px rgba(0,0,0,.08)}
-.hinner{max-width:640px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.htitle{font-size:17px;font-weight:700;color:#0f172a}
-.hsub{font-size:11px;color:#94a3b8;margin-top:2px}
 .hright{display:flex;align-items:center;gap:12px}
-/* Main */
-main{max-width:640px;margin:0 auto;padding:16px 12px;display:flex;flex-direction:column;gap:12px}
 
-/* Day card */
 .day-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
 .day-header{width:100%;background:none;border:none;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;text-align:left}
 .day-header:hover{background:#f8fafc}
@@ -32,11 +21,9 @@ main{max-width:640px;margin:0 auto;padding:16px 12px;display:flex;flex-direction
 .chevron.open{transform:rotate(180deg)}
 .done-icon{color:#0d9488;font-size:16px}
 
-/* Day body */
 .day-body{border-top:1px solid #f1f5f9;display:none}
 .day-body.open{display:block}
 
-/* Weather */
 .weather-box{margin:14px 16px 8px;background:linear-gradient(135deg,#f0fdfa,#f8fafc);border:1px solid #ccfbf1;border-radius:12px;padding:14px}
 .weather-label{font-size:10px;font-weight:700;color:#0d9488;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
 .weather-temp{font-size:22px;font-weight:700;color:#1e293b;line-height:1.2}
@@ -50,7 +37,6 @@ main{max-width:640px;margin:0 auto;padding:16px 12px;display:flex;flex-direction
 .outfit-list li{display:flex;gap:8px;font-size:12px;color:#475569;margin-bottom:6px;list-style:none}
 .outfit-list li::before{content:"•";color:#5eead4;flex-shrink:0;margin-top:1px}
 
-/* Timeline */
 .timeline{padding:14px 16px 8px}
 .task-row{display:flex;gap:10px;position:relative;margin-bottom:0}
 .task-content{flex:1;padding-bottom:14px}
@@ -66,7 +52,6 @@ main{max-width:640px;margin:0 auto;padding:16px 12px;display:flex;flex-direction
 .place-link:hover{color:#0f766e}
 .place-sub{font-weight:400;color:#64748b}
 
-/* Icon colors */
 .ic-flight{background:#eff6ff;color:#3b82f6}
 .ic-drive{background:#ecfdf5;color:#059669}
 .ic-hotel{background:#eef2ff;color:#6366f1}
@@ -78,7 +63,6 @@ main{max-width:640px;margin:0 auto;padding:16px 12px;display:flex;flex-direction
 .ic-nature{background:#f0fdf4;color:#16a34a}
 .ic-sunset{background:#fefce8;color:#ca8a04}
 
-/* Extra spots */
 .extra-section{border-top:1px solid #f1f5f9;background:rgba(255,251,235,.6)}
 .extra-btn{width:100%;background:none;border:none;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-size:13px;font-weight:600;color:#b45309}
 .extra-btn:hover{color:#92400e}
@@ -91,27 +75,12 @@ main{max-width:640px;margin:0 auto;padding:16px 12px;display:flex;flex-direction
 .extra-hours{font-size:11px;color:#b45309;font-family:monospace}
 .extra-desc{font-size:11px;color:#64748b}
 
-/* Footer */
-.footer{font-size:11px;color:#94a3b8;text-align:center;padding:8px 0 4px}
-
-/* Nav links (replaces inline styles) */
 .nav-link{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;padding:6px 12px;border-radius:8px;border:1px solid;transition:opacity .15s}
 .nav-link--teal{color:#0d9488;border-color:#99f6e4;background:#f0fdfa}
 .nav-link--purple{color:#a855f7;border-color:#e9d5ff;background:#faf5ff}
 
-/* Night mode button */
-.nm-btn{background:none;border:1px solid #e2e8f0;border-radius:8px;padding:5px 9px;cursor:pointer;font-size:15px;line-height:1;color:#475569;transition:background .15s,border-color .15s}
-.nm-btn:hover{background:#f1f5f9;border-color:#cbd5e1}
-
-/* Dark mode */
-[data-dark] body{background:#0f172a;color:#e2e8f0}
-[data-dark] header{background:#1e293b;border-color:#334155;box-shadow:0 1px 3px rgba(0,0,0,.3)}
-[data-dark] .htitle{color:#f1f5f9}
-[data-dark] .hsub{color:#475569}
 [data-dark] .nav-link--teal{color:#2dd4bf;border-color:#0d9488;background:#134e4a}
 [data-dark] .nav-link--purple{color:#c084fc;border-color:#7c3aed;background:#2e1065}
-[data-dark] .nm-btn{border-color:#334155;color:#94a3b8}
-[data-dark] .nm-btn:hover{background:#263348;border-color:#475569}
 [data-dark] .day-card{background:#1e293b;border-color:#334155;box-shadow:0 1px 3px rgba(0,0,0,.2)}
 [data-dark] .day-header:hover{background:#263348}
 [data-dark] .day-label{color:#2dd4bf}
@@ -152,7 +121,6 @@ main{max-width:640px;margin:0 auto;padding:16px 12px;display:flex;flex-direction
 [data-dark] .extra-name{color:#e2e8f0}
 [data-dark] .extra-hours{color:#fbbf24}
 [data-dark] .extra-desc{color:#64748b}
-[data-dark] .footer{color:#334155}
 </style>
 </head>
 <body>
@@ -173,6 +141,7 @@ main{max-width:640px;margin:0 auto;padding:16px 12px;display:flex;flex-direction
 
 <main id="main"></main>
 
+<script src="app.js"></script>
 <script>
 const P = (name, query, extra) => {
   const q = encodeURIComponent(query || name);
@@ -417,12 +386,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
   document.getElementById('main').appendChild(footer);
 });
 
-function toggleNight(){
-  const on=document.documentElement.toggleAttribute('data-dark');
-  document.getElementById('nm-btn').textContent=on?'☀️':'🌙';
-  localStorage.setItem('dark',on?'1':'');
-}
-(()=>{if(localStorage.getItem('dark')==='1'){document.documentElement.setAttribute('data-dark','');const b=document.getElementById('nm-btn');if(b)b.textContent='☀️';}})();
 </script>
 </body>
 </html>
