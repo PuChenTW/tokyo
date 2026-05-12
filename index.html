@@ -93,6 +93,66 @@ main{max-width:640px;margin:0 auto;padding:16px 12px;display:flex;flex-direction
 
 /* Footer */
 .footer{font-size:11px;color:#94a3b8;text-align:center;padding:8px 0 4px}
+
+/* Nav links (replaces inline styles) */
+.nav-link{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;padding:6px 12px;border-radius:8px;border:1px solid;transition:opacity .15s}
+.nav-link--teal{color:#0d9488;border-color:#99f6e4;background:#f0fdfa}
+.nav-link--purple{color:#a855f7;border-color:#e9d5ff;background:#faf5ff}
+
+/* Night mode button */
+.nm-btn{background:none;border:1px solid #e2e8f0;border-radius:8px;padding:5px 9px;cursor:pointer;font-size:15px;line-height:1;color:#475569;transition:background .15s,border-color .15s}
+.nm-btn:hover{background:#f1f5f9;border-color:#cbd5e1}
+
+/* Dark mode */
+[data-dark] body{background:#0f172a;color:#e2e8f0}
+[data-dark] header{background:#1e293b;border-color:#334155;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+[data-dark] .htitle{color:#f1f5f9}
+[data-dark] .hsub{color:#475569}
+[data-dark] .nav-link--teal{color:#2dd4bf;border-color:#0d9488;background:#134e4a}
+[data-dark] .nav-link--purple{color:#c084fc;border-color:#7c3aed;background:#2e1065}
+[data-dark] .nm-btn{border-color:#334155;color:#94a3b8}
+[data-dark] .nm-btn:hover{background:#263348;border-color:#475569}
+[data-dark] .day-card{background:#1e293b;border-color:#334155;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+[data-dark] .day-header:hover{background:#263348}
+[data-dark] .day-label{color:#2dd4bf}
+[data-dark] .day-date{color:#94a3b8}
+[data-dark] .day-title{color:#e2e8f0}
+[data-dark] .day-body{border-color:#334155}
+[data-dark] .weather-box{background:linear-gradient(135deg,#134e4a,#263348);border-color:#0d9488}
+[data-dark] .weather-temp{color:#f1f5f9}
+[data-dark] .weather-desc{color:#94a3b8}
+[data-dark] .tag{background:#134e4a;color:#2dd4bf;border-color:#0d9488}
+[data-dark] .outfit-btn{color:#2dd4bf}
+[data-dark] .outfit-btn:hover{color:#5eead4}
+[data-dark] .outfit-list li{color:#94a3b8}
+[data-dark] .outfit-list li::before{color:#334155}
+[data-dark] .task-time{color:#64748b}
+[data-dark] .task-name{color:#e2e8f0}
+[data-dark] .task-notes{background:#0f172a}
+[data-dark] .task-notes li{color:#94a3b8}
+[data-dark] .task-notes li::before{color:#334155}
+[data-dark] .place-link{color:#2dd4bf;text-decoration-color:#0d9488}
+[data-dark] .place-link:hover{color:#5eead4}
+[data-dark] .place-sub{color:#64748b}
+[data-dark] .ic-flight{background:#1e3a5f;color:#60a5fa}
+[data-dark] .ic-drive{background:#14532d;color:#34d399}
+[data-dark] .ic-hotel{background:#1e1b4b;color:#818cf8}
+[data-dark] .ic-food{background:#431407;color:#fb923c}
+[data-dark] .ic-sightseeing{background:#4c0519;color:#fb7185}
+[data-dark] .ic-shopping{background:#2e1065;color:#c084fc}
+[data-dark] .ic-cafe{background:#451a03;color:#fbbf24}
+[data-dark] .ic-train{background:#164e63;color:#22d3ee}
+[data-dark] .ic-nature{background:#14532d;color:#4ade80}
+[data-dark] .ic-sunset{background:#422006;color:#fbbf24}
+[data-dark] .extra-section{background:rgba(71,52,18,.3);border-color:#334155}
+[data-dark] .extra-btn{color:#fbbf24}
+[data-dark] .extra-btn:hover{color:#fcd34d}
+[data-dark] .extra-item{background:#1e293b;border-color:#78350f}
+[data-dark] .extra-item:hover{border-color:#92400e;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+[data-dark] .extra-name{color:#e2e8f0}
+[data-dark] .extra-hours{color:#fbbf24}
+[data-dark] .extra-desc{color:#64748b}
+[data-dark] .footer{color:#334155}
 </style>
 </head>
 <body>
@@ -104,8 +164,9 @@ main{max-width:640px;margin:0 auto;padding:16px 12px;display:flex;flex-direction
       <div class="hsub">2026 / 05/14 – 05/19</div>
     </div>
     <div class="hright">
-      <a href="luggage.html" style="display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#0d9488;padding:6px 12px;border-radius:8px;border:1px solid #99f6e4;background:#f0fdfa;">🧳 行李</a>
-      <a href="shopping.html" style="display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#a855f7;padding:6px 12px;border-radius:8px;border:1px solid #e9d5ff;background:#faf5ff;">🛍 購物</a>
+      <a href="luggage.html" class="nav-link nav-link--teal">🧳 行李</a>
+      <a href="shopping.html" class="nav-link nav-link--purple">🛍 購物</a>
+      <button class="nm-btn" id="nm-btn" onclick="toggleNight()" title="切換深色模式">🌙</button>
     </div>
   </div>
 </header>
@@ -355,6 +416,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
   footer.textContent='所有 Google Maps 連結點擊後在新分頁開啟。各店實際營業時間建議出發前再次確認。';
   document.getElementById('main').appendChild(footer);
 });
+
+function toggleNight(){
+  const on=document.documentElement.toggleAttribute('data-dark');
+  document.getElementById('nm-btn').textContent=on?'☀️':'🌙';
+  localStorage.setItem('dark',on?'1':'');
+}
+(()=>{if(localStorage.getItem('dark')==='1'){document.documentElement.setAttribute('data-dark','');const b=document.getElementById('nm-btn');if(b)b.textContent='☀️';}})();
 </script>
 </body>
 </html>

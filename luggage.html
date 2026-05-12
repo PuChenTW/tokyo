@@ -70,6 +70,45 @@ main{max-width:640px;margin:0 auto;padding:16px 12px;display:flex;flex-direction
 .action-btn.del:hover{background:#fff1f2;color:#f43f5e}
 
 .footer{font-size:11px;color:#94a3b8;text-align:center;padding:8px 0 4px}
+
+.nm-btn{background:none;border:1px solid #e2e8f0;border-radius:8px;padding:5px 9px;cursor:pointer;font-size:15px;line-height:1;color:#475569;transition:background .15s,border-color .15s}
+.nm-btn:hover{background:#f1f5f9;border-color:#cbd5e1}
+
+[data-dark] body{background:#0f172a;color:#e2e8f0}
+[data-dark] header{background:#1e293b;border-color:#334155;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+[data-dark] .htitle{color:#f1f5f9}
+[data-dark] .hsub{color:#475569}
+[data-dark] .back-btn{color:#2dd4bf;border-color:#0d9488;background:#134e4a}
+[data-dark] .back-btn:hover{background:#1a5c58}
+[data-dark] .nm-btn{border-color:#334155;color:#94a3b8}
+[data-dark] .nm-btn:hover{background:#263348;border-color:#475569}
+[data-dark] .add-card{background:#1e293b;border-color:#334155}
+[data-dark] .add-input{background:#0f172a;border-color:#334155;color:#e2e8f0}
+[data-dark] .add-input:focus{border-color:#2dd4bf;box-shadow:0 0 0 2px rgba(45,212,191,.12)}
+[data-dark] .add-input::placeholder{color:#475569}
+[data-dark] .add-cat{background:#0f172a;border-color:#334155;color:#e2e8f0}
+[data-dark] .add-cat:focus{border-color:#2dd4bf}
+[data-dark] .list-card{background:#1e293b;border-color:#334155}
+[data-dark] .card-header{border-color:#334155}
+[data-dark] .card-title{color:#f1f5f9}
+[data-dark] .clear-btn{border-color:#334155;color:#64748b}
+[data-dark] .clear-btn:hover{color:#f43f5e;border-color:#fecdd3}
+[data-dark] .item-row{border-color:#263348}
+[data-dark] .item-row:hover{background:#263348}
+[data-dark] .check-circle{border-color:#334155;background:#0f172a}
+[data-dark] .check-circle:hover{border-color:#475569}
+[data-dark] .item-name{color:#e2e8f0}
+[data-dark] .item-edit-input{background:#0f172a;border-color:#2dd4bf;color:#e2e8f0}
+[data-dark] .item-edit-cat{background:#0f172a;border-color:#2dd4bf;color:#e2e8f0}
+[data-dark] .action-btn:hover{background:#263348;color:#94a3b8}
+[data-dark] .action-btn.del:hover{background:#2d1a1e;color:#f43f5e}
+[data-dark] .cat-證件{background:#1e3a5f;color:#60a5fa;border-color:#1d4ed8}
+[data-dark] .cat-衣物{background:#2e1065;color:#c084fc;border-color:#7c3aed}
+[data-dark] .cat-3C{background:#134e4a;color:#2dd4bf;border-color:#0d9488}
+[data-dark] .cat-藥品{background:#4c0519;color:#fb7185;border-color:#be123c}
+[data-dark] .cat-盥洗{background:#14532d;color:#4ade80;border-color:#15803d}
+[data-dark] .cat-其他{background:#1e293b;color:#94a3b8;border-color:#334155}
+[data-dark] .footer{color:#334155}
 </style>
 </head>
 <body>
@@ -80,7 +119,10 @@ main{max-width:640px;margin:0 auto;padding:16px 12px;display:flex;flex-direction
       <div class="htitle">🧳 行李清單</div>
       <div class="hsub">東京・茨城旅程</div>
     </div>
-    <a href="index.html" class="back-btn">← 回行程</a>
+    <div style="display:flex;align-items:center;gap:8px">
+      <a href="index.html" class="back-btn">← 回行程</a>
+      <button class="nm-btn" id="nm-btn" onclick="toggleNight()" title="切換深色模式">🌙</button>
+    </div>
   </div>
 </header>
 
@@ -388,6 +430,13 @@ openDB().then(async () => {
   }
   render();
 });
+
+function toggleNight(){
+  const on=document.documentElement.toggleAttribute('data-dark');
+  document.getElementById('nm-btn').textContent=on?'☀️':'🌙';
+  localStorage.setItem('dark',on?'1':'');
+}
+(()=>{if(localStorage.getItem('dark')==='1'){document.documentElement.setAttribute('data-dark','');const b=document.getElementById('nm-btn');if(b)b.textContent='☀️';}})();
 </script>
 </body>
 </html>
