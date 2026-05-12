@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>購物清單</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f8fafc;color:#1e293b;padding-bottom:60px}
+a{color:inherit;text-decoration:none}
+
+header{background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:20;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.hinner{max-width:640px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.htitle{font-size:17px;font-weight:700;color:#0f172a}
+.hsub{font-size:11px;color:#94a3b8;margin-top:2px}
+.back-btn{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#0d9488;padding:6px 12px;border-radius:8px;border:1px solid #99f6e4;background:#f0fdfa;transition:background .15s}
+.back-btn:hover{background:#ccfbf1}
+
+main{max-width:640px;margin:0 auto;padding:16px 12px}
+
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.card-header{padding:16px 16px 12px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between}
+.card-title{font-size:15px;font-weight:700;color:#0f172a;display:flex;align-items:center;gap:8px}
+.prog-label{font-size:12px;color:#94a3b8}
+.prog-val{font-size:13px;font-weight:700;color:#0d9488}
+
+.item-list{padding:8px 0}
+.item-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid #f8fafc;transition:background .1s}
+.item-row:last-child{border-bottom:none}
+.item-row:hover{background:#fafcff}
+.check-btn{flex-shrink:0;background:none;border:none;cursor:pointer;padding:0;line-height:0}
+.check-circle{width:26px;height:26px;border-radius:50%;border:2px solid #e2e8f0;display:flex;align-items:center;justify-content:center;background:#fff;transition:border-color .15s,background .15s}
+.check-circle:hover{border-color:#cbd5e1}
+.check-circle.checked{border-color:#0d9488;background:#0d9488}
+.check-circle.checked::after{content:"✓";color:#fff;font-size:13px;font-weight:700}
+.item-name{font-size:14px;font-weight:500;color:#1e293b;transition:opacity .2s}
+.item-name.done{opacity:.35;text-decoration:line-through;text-decoration-color:#cbd5e1}
+
+.footer{font-size:11px;color:#94a3b8;text-align:center;padding:16px 0 4px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hinner">
+    <div>
+      <div class="htitle">購物清單</div>
+      <div class="hsub">東京・茨城旅程</div>
+    </div>
+    <a href="index.html" class="back-btn">← 回行程</a>
+  </div>
+</header>
+
+<main>
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">🛍 待買清單</div>
+      <div style="text-align:right">
+        <div class="prog-label">已購入</div>
+        <div class="prog-val" id="prog-text">0 / 0</div>
+      </div>
+    </div>
+    <div class="item-list" id="list"></div>
+  </div>
+  <div class="footer">點擊圓圈標記已購入</div>
+</main>
+
+<script>
+const items = [
+  "長褲",
+  "襯衫",
+  "耳機",
+  "香氛",
+  "睡眠噴霧",
+];
+
+const KEY = "shopping_checked";
+const checked = new Set(JSON.parse(localStorage.getItem(KEY) || "[]"));
+
+function save() {
+  localStorage.setItem(KEY, JSON.stringify([...checked]));
+}
+
+function updateProg() {
+  document.getElementById("prog-text").textContent = `${checked.size} / ${items.length}`;
+}
+
+const list = document.getElementById("list");
+items.forEach((name, i) => {
+  const row = document.createElement("div");
+  row.className = "item-row";
+
+  const btn = document.createElement("button");
+  btn.className = "check-btn";
+  btn.setAttribute("aria-label", `標記 ${name}`);
+
+  const circle = document.createElement("div");
+  circle.className = "check-circle" + (checked.has(i) ? " checked" : "");
+  btn.appendChild(circle);
+
+  const label = document.createElement("div");
+  label.className = "item-name" + (checked.has(i) ? " done" : "");
+  label.textContent = name;
+
+  btn.addEventListener("click", () => {
+    if (checked.has(i)) {
+      checked.delete(i);
+      circle.classList.remove("checked");
+      label.classList.remove("done");
+    } else {
+      checked.add(i);
+      circle.classList.add("checked");
+      label.classList.add("done");
+    }
+    save();
+    updateProg();
+  });
+
+  row.appendChild(btn);
+  row.appendChild(label);
+  list.appendChild(row);
+});
+
+updateProg();
+</script>
+</body>
+</html>
