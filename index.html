@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>東京・茨城 6 日旅程</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f8fafc;color:#1e293b;padding-bottom:60px}
+a{color:inherit;text-decoration:none}
+
+/* Header */
+header{background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:20;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.hinner{max-width:640px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.htitle{font-size:17px;font-weight:700;color:#0f172a}
+.hsub{font-size:11px;color:#94a3b8;margin-top:2px}
+.hright{display:flex;align-items:center;gap:12px}
+.hcount{text-align:right}
+.hcount p:first-child{font-size:11px;color:#94a3b8}
+.hcount p:last-child{font-size:13px;font-weight:700;color:#0d9488}
+.ring{width:40px;height:40px;background:#f1f5f9;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.ring svg{width:32px;height:32px;transform:rotate(-90deg)}
+
+/* Main */
+main{max-width:640px;margin:0 auto;padding:16px 12px;display:flex;flex-direction:column;gap:12px}
+
+/* Day card */
+.day-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.day-header{width:100%;background:none;border:none;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;text-align:left}
+.day-header:hover{background:#f8fafc}
+.day-left{display:flex;align-items:center;gap:12px;min-width:0}
+.day-label-block{text-align:center;width:52px;flex-shrink:0}
+.day-label{font-size:11px;font-weight:700;color:#0d9488;text-transform:uppercase}
+.day-date{font-size:12px;font-weight:600;color:#475569}
+.day-title{font-size:13px;font-weight:600;color:#1e293b;line-height:1.4}
+.day-prog{font-size:11px;color:#94a3b8;margin-top:2px}
+.day-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.chevron{font-size:16px;color:#94a3b8;transition:transform .2s}
+.chevron.open{transform:rotate(180deg)}
+.done-icon{color:#0d9488;font-size:16px}
+
+/* Day body */
+.day-body{border-top:1px solid #f1f5f9;display:none}
+.day-body.open{display:block}
+
+/* Weather */
+.weather-box{margin:14px 16px 8px;background:linear-gradient(135deg,#f0fdfa,#f8fafc);border:1px solid #ccfbf1;border-radius:12px;padding:14px}
+.weather-label{font-size:10px;font-weight:700;color:#0d9488;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.weather-temp{font-size:22px;font-weight:700;color:#1e293b;line-height:1.2}
+.weather-desc{font-size:12px;color:#64748b;margin-top:4px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.tag{display:inline-flex;align-items:center;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:500;background:#f0fdfa;color:#0d9488;border:1px solid #99f6e4}
+.outfit-btn{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#0d9488;background:none;border:none;cursor:pointer;margin-top:10px;padding:0}
+.outfit-btn:hover{color:#0f766e}
+.outfit-list{margin-top:8px;display:none}
+.outfit-list.open{display:block}
+.outfit-list li{display:flex;gap:8px;font-size:12px;color:#475569;margin-bottom:6px;list-style:none}
+.outfit-list li::before{content:"•";color:#5eead4;flex-shrink:0;margin-top:1px}
+
+/* Timeline */
+.timeline{padding:14px 16px 8px}
+.task-row{display:flex;gap:10px;position:relative;margin-bottom:0}
+.task-row:not(:last-child)::before{content:"";position:absolute;left:15px;top:32px;bottom:-8px;width:1px;background:#f1f5f9;z-index:0}
+.task-check{flex-shrink:0;background:none;border:none;cursor:pointer;padding:0;margin-top:4px;position:relative;z-index:1;line-height:0}
+.check-circle{width:24px;height:24px;border-radius:50%;border:2px solid #e2e8f0;display:flex;align-items:center;justify-content:center;background:#fff;transition:border-color .15s}
+.check-circle:hover{border-color:#cbd5e1}
+.check-circle.checked{border-color:#0d9488;background:#0d9488}
+.check-circle.checked::after{content:"✓";color:#fff;font-size:13px;font-weight:700}
+.task-content{flex:1;padding-bottom:14px;transition:opacity .2s}
+.task-content.done{opacity:.4}
+.task-meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:4px}
+.task-time{font-family:monospace;font-size:11px;color:#94a3b8;width:110px;flex-shrink:0}
+.task-icon{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.task-name{font-size:13px;font-weight:600;color:#1e293b}
+.task-notes{margin-left:116px;background:#f8fafc;border-radius:8px;padding:8px 12px;margin-top:4px}
+.task-notes li{display:flex;gap:6px;font-size:12px;color:#475569;margin-bottom:4px;list-style:none}
+.task-notes li:last-child{margin-bottom:0}
+.task-notes li::before{content:"–";color:#cbd5e1;flex-shrink:0}
+.place-link{display:inline-flex;align-items:center;gap:3px;font-weight:600;color:#0d9488;text-decoration:underline;text-decoration-color:#99f6e4;text-underline-offset:2px}
+.place-link:hover{color:#0f766e}
+.place-sub{font-weight:400;color:#64748b}
+
+/* Icon colors */
+.ic-flight{background:#eff6ff;color:#3b82f6}
+.ic-drive{background:#ecfdf5;color:#059669}
+.ic-hotel{background:#eef2ff;color:#6366f1}
+.ic-food{background:#fff7ed;color:#f97316}
+.ic-sightseeing{background:#fff1f2;color:#f43f5e}
+.ic-shopping{background:#faf5ff;color:#a855f7}
+.ic-cafe{background:#fffbeb;color:#92400e}
+.ic-train{background:#ecfeff;color:#0891b2}
+.ic-nature{background:#f0fdf4;color:#16a34a}
+.ic-sunset{background:#fefce8;color:#ca8a04}
+
+/* Extra spots */
+.extra-section{border-top:1px solid #f1f5f9;background:rgba(255,251,235,.6)}
+.extra-btn{width:100%;background:none;border:none;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-size:13px;font-weight:600;color:#b45309}
+.extra-btn:hover{color:#92400e}
+.extra-grid{padding:0 16px 14px;display:none;grid-template-columns:1fr 1fr;gap:8px}
+.extra-grid.open{display:grid}
+@media(max-width:480px){.extra-grid{grid-template-columns:1fr}}
+.extra-item{display:flex;flex-direction:column;gap:3px;padding:10px;background:#fff;border-radius:10px;border:1px solid #fde68a;text-decoration:none;transition:border-color .15s,box-shadow .15s}
+.extra-item:hover{border-color:#fbbf24;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+.extra-name{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:#1e293b}
+.extra-hours{font-size:11px;color:#b45309;font-family:monospace}
+.extra-desc{font-size:11px;color:#64748b}
+
+/* Footer */
+.footer{font-size:11px;color:#94a3b8;text-align:center;padding:8px 0 4px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hinner">
+    <div>
+      <div class="htitle">東京・茨城 6 日旅程</div>
+      <div class="hsub">2026 / 05/14 – 05/19</div>
+    </div>
+    <div class="hright">
+      <div class="hcount">
+        <p>完成進度</p>
+        <p id="prog-text">0 / 0</p>
+      </div>
+      <div class="ring">
+        <svg viewBox="0 0 36 36">
+          <circle cx="18" cy="18" r="14" fill="none" stroke="#e2e8f0" stroke-width="4"/>
+          <circle id="ring-circle" cx="18" cy="18" r="14" fill="none" stroke="#0d9488" stroke-width="4"
+            stroke-dasharray="0 88" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main"></main>
+
+<script>
+const P = (name, query, extra) => {
+  const q = encodeURIComponent(query || name);
+  const sub = extra ? `<span class="place-sub">${extra}</span>` : '';
+  return `<a class="place-link" href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noreferrer">📍${name}${sub}</a>`;
+};
+
+const days = [
+  {
+    id:1, date:"5/14（四）", label:"Day 1", title:"台北 → 成田 → 自駕前往大洗",
+    temp:"25°C / 17°C", desc:"東京有陽光也有短暫陣雨；往大洗後晚間體感更涼。",
+    tags:["薄外套","長褲","摺疊傘"],
+    outfit:["飛機上穿短袖＋薄罩衫，抵達後直接應對晚間溫差","下身選長褲最省事，開車與晚上海邊都較舒適","包內先放一把輕便傘"],
+    tasks:[
+      {id:"1-1",time:"10:25 – 14:55",ic:"flight",name:"搭乘 JL802",notes:["入境、領行李、辦理租車手續（於成田取車）"]},
+      {id:"1-2",time:"下午 ～ 傍晚",ic:"drive",name:"自駕前往大洗",notes:[`自駕往 ${P("大洗","大洗 茨城")}，車程約 2–2.5 小時`]},
+      {id:"1-3",time:"傍晚",ic:"hotel",name:"入住飯店",notes:[`${P("大洗ホテルANNEX 魚来庵","大洗ホテル ANNEX 魚来庵")}，海景房，可從房內看到神磯之鳥居與日出方向`]},
+      {id:"1-4",time:"晚上",ic:"food",name:"晚餐與休息",notes:[`${P("大洗港周邊","大洗港 餐廳")}，簡單用餐，早點休息準備隔天看日出`]},
+    ]
+  },
+  {
+    id:2, date:"5/15（五）", label:"Day 2", title:"大洗日出・海邊散步・御岩神社",
+    temp:"23–25°C / 14–18°C", desc:"白天溫和，海邊清晨與神社林間偏涼，局部降雨仍有可能。",
+    tags:["防風外套","運動鞋","可脫穿層次"],
+    outfit:["清晨看日出要多一件防風外套，海風會比市區明顯","上身建議短袖打底，外搭襯衫或薄外套，白天熱了能直接脫","鞋子以抓地力較好的運動鞋為主，神社步道更穩"],
+    tasks:[
+      {id:"2-1",time:"04:10 – 05:30",ic:"sunset",name:"看日出",notes:[`${P("神磯の鳥居","神磯の鳥居 大洗")}，5月日出約 4:45，房間陽台或步行至海邊觀賞，看完回飯店補眠`]},
+      {id:"2-2",time:"08:30 – 10:30",ic:"sightseeing",name:"海邊散步參拜",notes:[`${P("大洗磯前神社")}，近距離看海浪與鳥居`]},
+      {id:"2-3",time:"11:00 – 12:30",ic:"food",name:"壽司午餐",notes:[`<a class="place-link" href="https://maps.app.goo.gl/uNKhagBHDftqyCcE8" target="_blank" rel="noreferrer">📍Sushi Yukyu</a>，11:00 開門，⚠️ 建議提早到場排隊`]},
+      {id:"2-4",time:"12:30 – 13:30",ic:"drive",name:"自駕移動",notes:[`${P("大洗 → 御岩神社","御岩神社 日立市")}，車程約 45–70 分鐘`]},
+      {id:"2-5",time:"13:30 – 15:30",ic:"nature",name:"森林參道散步",notes:[`${P("御岩神社","御岩神社 日立市")}，拝殿、三本杉，視體力加碼輕量登山 20–30 分鐘後折返`]},
+      {id:"2-6",time:"15:30 – 16:30",ic:"drive",name:"自駕回程",notes:["御岩神社 → 大洗，車程約 45–70 分鐘"]},
+      {id:"2-7",time:"16:30 – 18:00",ic:"shopping",name:"海邊散步＋逛街",notes:[`${P("OARAI Seaside Station","OARAI Seaside Station 大洗")}，大洗まいわい市場小買常溫土產`]},
+      {id:"2-8",time:"晚上",ic:"food",name:"晚餐",notes:[`${P("大洗港周邊","大洗 夜間餐廳")}，港邊或飯店附近用餐`]},
+    ],
+    extra:{
+      label:"5/15 自駕加點",
+      items:[
+        {name:"SAZA COFFEE Oarai",query:"SAZA COFFEE Oarai 大洗 Seaside Station",hours:"10:00–19:00",desc:"咖啡與甜點都穩，海邊散步後坐一下最舒服"},
+        {name:"Romii Donuts Store",query:"Romii Donuts Store 大洗",hours:"10:30–18:00",desc:"適合外帶甜甜圈上車或回飯店吃"},
+        {name:"KANOUYA 菓子店",query:"KANOUYA 大洗",hours:"08:00–19:00",desc:"麵包、銅鑼燒或常溫點心當補給"},
+        {name:"手打蕎麦 入四間",query:"手打蕎麦 入四間 日立",hours:"11:00–14:30",desc:"靠近御岩神社，不想吃海鮮時的午餐替代案"},
+        {name:"セントエルモスカフェ",query:"セントエルモスカフェ 大洗",hours:"10:00–21:00",desc:"回大洗後想找舒服坐點可用它收尾"},
+      ]
+    }
+  },
+  {
+    id:3, date:"5/16（六）", label:"Day 3", title:"常陸海濱公園・採買 → 大井町",
+    temp:"23–25°C / 14–18°C", desc:"白天舒適偏暖，戶外停留時間長，建議注意日照與走路量。",
+    tags:["短袖","遮陽帽","輕便鞋"],
+    outfit:["可以走比較輕鬆的城市戶外穿搭，短袖或薄長袖都適合","公園空曠，帽子與太陽眼鏡實用度高","晚上回東京後可加一件薄外套"],
+    tasks:[
+      {id:"3-1",time:"09:00 – 09:30",ic:"drive",name:"退房＋自駕移動",notes:["大洗 → 常陸海濱公園，車程約 20–25 分鐘"]},
+      {id:"3-2",time:"09:30 – 11:30",ic:"nature",name:"國營常陸海濱公園",notes:[`${P("常陸海濱公園","国営ひたち海浜公園")}，みはらしの丘 與中央草地，看花田與草地景觀`]},
+      {id:"3-3",time:"11:30 – 13:00",ic:"food",name:"當地午餐",notes:[`${P("那珂湊漁港周邊","那珂湊漁港 海鮮")}，海鮮市場餐廳`]},
+      {id:"3-4",time:"13:00 – 14:30",ic:"shopping",name:"伴手禮採買",notes:[
+        `${P("daimaruya／焼いも館","daimaruya 常陸那珂 干し芋")}（干し芋）`,
+        `${P("黒澤醤油","黒澤醤油 常陸那珂")}（調味料）`,
+        "JA直賣所補食品"
+      ]},
+      {id:"3-5",time:"14:30 – 15:30",ic:"cafe",name:"咖啡中繼（二選一）",notes:[
+        `${P("Saza Coffee 本店","Saza Coffee 本店 水戸")}（10:00–20:00，規模大甜點完整）`,
+        `${P("Capian Coffee","Capian Coffee 常陸那珂")}（09:00–19:00，氣氛穩定）`,
+        `${P("gooddayincoffee","gooddayincoffee 茨城")}（10:00–16:00，快速外帶型）`,
+      ]},
+      {id:"3-6",time:"15:30 – 17:30",ic:"drive",name:"上高速回東京",notes:[`常磐道途中可停 ${P("守谷 SA（Pasar 守谷）","守谷サービスエリア 常磐道")} 休息 20–40 分鐘`]},
+      {id:"3-7",time:"17:30 – 19:00",ic:"hotel",name:"還車＋入住",notes:[`${P("Ours Inn Hankyu 大井町","Ours Inn Hankyu 大井町")}，加油＋還車預計 19:00 前完成`]},
+      {id:"3-8",time:"晚上",ic:"shopping",name:"晚餐＋採買",notes:[`${P("大井町周邊","大井町 居酒屋")}，居酒屋、拉麵、定食等，逛超市/藥妝補零食飲料`]},
+    ]
+  },
+  {
+    id:4, date:"5/17（日）", label:"Day 4", title:"築地早餐・藏前・Lonich・咖啡巡禮",
+    temp:"約 23–25°C / 16–18°C", desc:"東京 5 月中旬多為舒適溫度，仍要預留午後陣雨彈性。",
+    tags:["短袖＋襯衫","好走鞋","小傘"],
+    outfit:["這天最重要的是鞋子，請直接穿最好走的那雙","上身適合短袖搭輕薄襯衫，室內冷氣或晚餐後回程都能應付","若想拍照好看，可走簡單層次感穿搭，但不要選磨腳的新鞋"],
+    tasks:[
+      {id:"4-1",time:"07:30 – 09:30",ic:"food",name:"場外市場早餐",notes:[`${P("築地場外市場")}，壽司、海鮮丼、玉子燒等`]},
+      {id:"4-2",time:"10:00 – 12:30",ic:"shopping",name:"藏前散步",notes:[`${P("藏前エリア","藏前 東京 雜貨")}，10:00 先找早開咖啡店，11:00 小店陸續開門：雜貨、選物、文具等`]},
+      {id:"4-3",time:"12:30",ic:"food",name:"午餐",notes:[`${P("藏前周邊","藏前 ランチ")}，定食、拉麵、蕎麥麵等簡單解決`]},
+      {id:"4-4",time:"13:30",ic:"cafe",name:"創作咖啡套餐（已預約）",notes:[`${P("Lonich","Lonich coffee Tokyo")}，預約制，含咖啡＋甜點，約 1.5–2 小時`]},
+      {id:"4-5",time:"15:30 – 16:30",ic:"cafe",name:"精品咖啡",notes:[`${P("GLITCH COFFEE 神保町","GLITCH COFFEE 神保町")}，主打單一產區淺焙`]},
+      {id:"4-6",time:"17:00 – 18:00",ic:"cafe",name:"銀座咖啡",notes:[`${P("X COFFEE Ginza")}，銀座一丁目附近`]},
+      {id:"4-7",time:"晚上",ic:"food",name:"晚餐＋回飯店",notes:[`${P("銀座周邊","銀座 ディナー")}，餐後搭電車回大井町`]},
+    ]
+  },
+  {
+    id:5, date:"5/18（一）", label:"Day 5", title:"明治神宮・表參道・澀谷・新宿採買",
+    temp:"約 23–25°C / 16–18°C", desc:"東京整體仍是溫暖舒適型天氣，白天短袖多半沒問題。",
+    tags:["透氣上衣","可肩背外套","購物袋"],
+    outfit:["城市逛街以輕便透氣為主，短袖或薄長袖都可以","建議帶可摺收的購物袋，後段採買會更省力","若當天想試鞋，襪子穿平常最常搭配的厚度最準"],
+    tasks:[
+      {id:"5-1",time:"09:00",ic:"nature",name:"參拜＋散步",notes:[`${P("明治神宮")} → ${P("代代木公園")}，搭車至原宿站`]},
+      {id:"5-2",time:"中午",ic:"food",name:"午餐",notes:[`${P("原宿・表參道周邊","原宿 表参道 ランチ")}，找咖啡廳、餐館用餐`]},
+      {id:"5-3",time:"下午",ic:"shopping",name:"服飾鞋款採買",notes:[
+        P("Asics Tiger 原宿店","Asics Harajuku"),
+        P("UNIQLO 原宿店","UNIQLO Harajuku"),
+        P("Found MUJI 青山","Found MUJI Aoyama","（週一 12:00 開門）"),
+      ]},
+      {id:"5-4",time:"傍晚",ic:"shopping",name:"澀谷逛街",notes:[
+        P("無印良品 西武澀谷店","無印良品 西武渋谷店"),
+        P("GU Shibuya"),
+        P("Asics Walking Shibuya","Asics Walking Shibuya","（視情況）"),
+      ]},
+      {id:"5-5",time:"17:30 – 18:30",ic:"shopping",name:"咖啡器材採買",notes:[
+        `${P("Yamamoto Coffee 新宿","Yamamoto Coffee Shinjuku")}，買濾杯、濾紙、手沖壺`,
+        "詢問 CAFEC DEEP 27 濾杯庫存"
+      ]},
+      {id:"5-6",time:"18:30 後",ic:"food",name:"晚餐＋回飯店",notes:[`${P("新宿周邊","新宿 ディナー")}，餐後回大井町`]},
+    ]
+  },
+  {
+    id:6, date:"5/19（二）", label:"Day 6", title:"增上寺・東京鐵塔 → 壽司浩也 → 返台",
+    temp:"約 23–25°C / 16–19°C", desc:"東京 5 月中旬維持舒適暖度，機場移動建議保留一件薄外套在手邊。",
+    tags:["好整理穿搭","薄外套","機場好穿脫"],
+    outfit:["選最容易整理、最舒服的返程穿搭，避免太厚重","薄外套可應付早上戶外散步、車站冷氣與機上溫差","鞋子以好穿脫為佳，過安檢與長途移動都更順手"],
+    tasks:[
+      {id:"6-1",time:"早上",ic:"hotel",name:"退房＋寄放行李",notes:[`${P("Ours Inn Hankyu","Ours Inn Hankyu 大井町")}，寄放飯店或搭車至大門站/濱松町站置物櫃`]},
+      {id:"6-2",time:"09:00 – 10:30",ic:"sightseeing",name:"散步放空",notes:[`${P("增上寺","増上寺")} ＋ ${P("芝公園")}，拍東京鐵塔＋寺院經典畫面`]},
+      {id:"6-3",time:"10:30 – 11:30",ic:"sightseeing",name:"東京鐵塔",notes:[`${P("東京鐵塔","東京タワー")}，可上展望台或塔下拍照，11:30 步行回大門站`]},
+      {id:"6-4",time:"12:00",ic:"food",name:"午餐（已預約）",notes:[`${P("站立壽司 浩也","立ち喰い鮨 浩也 大門")}，大門站 A4 出口步行 1 分鐘，板前現做`]},
+      {id:"6-5",time:"13:00 – 15:30",ic:"train",name:"取行李＋移動羽田",notes:[`約 15:00 從 ${P("濱松町站","浜松町駅")} 搭東京單軌電車至 ${P("羽田機場","羽田空港 国際線ターミナル")}，車程 15–20 分`]},
+      {id:"6-6",time:"18:25 – 20:50",ic:"flight",name:"搭乘 JL099 返台",notes:["HND → TSA，預留報到、托運、免稅店時間"]},
+    ]
+  }
+];
+
+const ICONS = {
+  flight:"✈️", drive:"🚗", hotel:"🛏️", food:"🍽️",
+  sightseeing:"📷", shopping:"🛍️", cafe:"☕", train:"🚆",
+  nature:"🌲", sunset:"🌅"
+};
+
+let doneSet = new Set();
+let totalTasks = days.reduce((s,d)=>s+d.tasks.length,0);
+
+function updateProgress(){
+  const c = doneSet.size;
+  document.getElementById('prog-text').textContent = `${c} / ${totalTasks}`;
+  const pct = Math.round(c/totalTasks*100);
+  document.getElementById('ring-circle').setAttribute('stroke-dasharray',`${pct*0.88} 88`);
+}
+
+function renderDays(){
+  const main = document.getElementById('main');
+  main.innerHTML = '';
+  days.forEach(day => {
+    const card = document.createElement('div');
+    card.className = 'day-card';
+    card.id = `day-${day.id}`;
+
+    // Extra HTML
+    let extraHTML = '';
+    if(day.extra){
+      const items = day.extra.items.map(s=>`
+        <a class="extra-item" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.query)}" target="_blank" rel="noreferrer">
+          <span class="extra-name">📍${s.name}</span>
+          <span class="extra-hours">${s.hours}</span>
+          <span class="extra-desc">${s.desc}</span>
+        </a>`).join('');
+      extraHTML = `
+        <div class="extra-section">
+          <button class="extra-btn" onclick="toggleExtra(${day.id})">
+            <span>📍${day.extra.label}（${day.extra.items.length} 個選點）</span>
+            <span id="extra-chev-${day.id}">▼</span>
+          </button>
+          <div class="extra-grid" id="extra-grid-${day.id}">${items}</div>
+        </div>`;
+    }
+
+    // Tasks
+    const tasksHTML = day.tasks.map((t,i)=>{
+      const isLast = i===day.tasks.length-1;
+      const notes = t.notes.map(n=>`<li>${n}</li>`).join('');
+      return `
+        <div class="task-row" id="row-${t.id}" style="${isLast?'':''}">
+          <button class="task-check" onclick="toggleTask('${t.id}','${day.id}')" aria-label="切換完成">
+            <div class="check-circle" id="chk-${t.id}"></div>
+          </button>
+          <div class="task-content" id="tc-${t.id}">
+            <div class="task-meta">
+              <span class="task-time">${t.time}</span>
+              <span class="task-icon ic-${t.ic}">${ICONS[t.ic]||'•'}</span>
+              <span class="task-name">${t.name}</span>
+            </div>
+            ${notes?`<ul class="task-notes">${notes}</ul>`:''}
+          </div>
+        </div>`;
+    }).join('');
+
+    // Outfit
+    const outfitItems = day.outfit.map(o=>`<li>${o}</li>`).join('');
+
+    card.innerHTML = `
+      <button class="day-header" onclick="toggleDay(${day.id})">
+        <div class="day-left">
+          <div class="day-label-block" id="dlb-${day.id}">
+            <div class="day-label">${day.label}</div>
+            <div class="day-date">${day.date}</div>
+          </div>
+          <div>
+            <div class="day-title" id="dt-${day.id}">${day.title}</div>
+            <div class="day-prog" id="dp-${day.id}">0/${day.tasks.length} 完成</div>
+          </div>
+        </div>
+        <div class="day-right">
+          <span id="di-${day.id}"></span>
+          <span class="chevron" id="chev-${day.id}">▼</span>
+        </div>
+      </button>
+      <div class="day-body" id="body-${day.id}">
+        <div class="weather-box">
+          <div class="weather-label">預估天氣</div>
+          <div class="weather-temp">${day.temp}</div>
+          <div class="weather-desc">${day.desc}</div>
+          <div class="tags">${day.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+          <button class="outfit-btn" onclick="toggleOutfit(${day.id})">👕 穿著建議 <span id="oc-${day.id}">▼</span></button>
+          <ul class="outfit-list" id="ol-${day.id}">${outfitItems}</ul>
+        </div>
+        <div class="timeline">${tasksHTML}</div>
+        ${extraHTML}
+      </div>`;
+    main.appendChild(card);
+  });
+
+  // Open day 1 by default
+  document.getElementById(`body-1`).classList.add('open');
+  document.getElementById(`chev-1`).classList.add('open');
+
+  updateDayProgress();
+  updateProgress();
+}
+
+function toggleDay(id){
+  const body = document.getElementById(`body-${id}`);
+  const chev = document.getElementById(`chev-${id}`);
+  body.classList.toggle('open');
+  chev.classList.toggle('open');
+}
+
+function toggleOutfit(id){
+  const ol = document.getElementById(`ol-${id}`);
+  const oc = document.getElementById(`oc-${id}`);
+  ol.classList.toggle('open');
+  oc.textContent = ol.classList.contains('open') ? '▲' : '▼';
+}
+
+function toggleExtra(id){
+  const g = document.getElementById(`extra-grid-${id}`);
+  const c = document.getElementById(`extra-chev-${id}`);
+  g.classList.toggle('open');
+  c.textContent = g.classList.contains('open') ? '▲' : '▼';
+}
+
+function toggleTask(tid, did){
+  const chk = document.getElementById(`chk-${tid}`);
+  const tc  = document.getElementById(`tc-${tid}`);
+  if(doneSet.has(tid)){
+    doneSet.delete(tid);
+    chk.classList.remove('checked');
+    tc.classList.remove('done');
+  } else {
+    doneSet.add(tid);
+    chk.classList.add('checked');
+    tc.classList.add('done');
+  }
+  updateDayProgress();
+  updateProgress();
+}
+
+function updateDayProgress(){
+  days.forEach(day=>{
+    const ids = day.tasks.map(t=>t.id);
+    const done = ids.filter(id=>doneSet.has(id)).length;
+    const all = done===ids.length;
+    document.getElementById(`dp-${day.id}`).textContent=`${done}/${ids.length} 完成`;
+    const dt = document.getElementById(`dt-${day.id}`);
+    const dlb = document.getElementById(`dlb-${day.id}`);
+    dt.style.textDecoration = all ? 'line-through' : '';
+    dt.style.opacity = all ? '0.5' : '';
+    dlb.style.opacity = all ? '0.4' : '';
+    const di = document.getElementById(`di-${day.id}`);
+    di.textContent = all ? '✅' : '';
+  });
+}
+
+// Footer
+document.addEventListener('DOMContentLoaded', ()=>{
+  renderDays();
+  const footer = document.createElement('p');
+  footer.className='footer';
+  footer.textContent='所有 Google Maps 連結點擊後在新分頁開啟。各店實際營業時間建議出發前再次確認。';
+  document.getElementById('main').appendChild(footer);
+});
+</script>
+</body>
+</html>
