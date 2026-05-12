@@ -65,6 +65,7 @@ main{max-width:640px;margin:0 auto;padding:16px 12px;display:flex;flex-direction
 .item-name{flex:1;font-size:14px;font-weight:500;color:#1e293b;min-width:0;word-break:break-all;line-height:1.4}
 .item-name.done{opacity:.35;text-decoration:line-through;text-decoration-color:#cbd5e1}
 .item-edit-input{flex:1;padding:4px 8px;border:1px solid #0d9488;border-radius:6px;font-size:14px;color:#1e293b;outline:none;background:#f0fdfa;min-width:0}
+.item-edit-cat{padding:4px 6px;border:1px solid #0d9488;border-radius:6px;font-size:12px;color:#1e293b;background:#f0fdfa;outline:none;flex-shrink:0}
 
 .row-actions{display:flex;gap:2px;flex-shrink:0}
 .action-btn{background:none;border:none;cursor:pointer;padding:5px 6px;border-radius:6px;font-size:14px;line-height:1;color:#94a3b8;transition:color .15s,background .15s}
@@ -117,6 +118,7 @@ main{max-width:640px;margin:0 auto;padding:16px 12px;display:flex;flex-direction
 </main>
 
 <script>
+const CATEGORIES = ['其他','衣物','咖啡','藥妝','食品','雜貨'];
 const DB_NAME = 'tokyo-shopping';
 const DB_VER = 1;
 const STORE_NAME = 'items';
@@ -223,7 +225,7 @@ async function render() {
     editBtn.className = 'action-btn edit';
     editBtn.textContent = '✏️';
     editBtn.title = '編輯';
-    editBtn.addEventListener('click', () => startEdit(item, nameEl));
+    editBtn.addEventListener('click', () => startEdit(item, row));
 
     const delBtn = document.createElement('button');
     delBtn.className = 'action-btn del';
@@ -243,33 +245,63 @@ async function render() {
   updateProg();
 }
 
-function startEdit(item, nameEl) {
-  const input = document.createElement('input');
-  input.className = 'item-edit-input';
-  input.type = 'text';
-  input.value = item.name;
-  input.maxLength = 80;
-  nameEl.replaceWith(input);
-  input.focus();
-  input.select();
+function startEdit(item, row) {
+  const badge = row.querySelector('.cat-badge');
+  const nameEl = row.querySelector('.item-name');
+
+  const catSelect = document.createElement('select');
+  catSelect.className = 'item-edit-cat';
+  CATEGORIES.forEach(cat => {
+    const opt = document.createElement('option');
+    opt.value = cat;
+    opt.textContent = cat;
+    if (cat === item.category) opt.selected = true;
+    catSelect.appendChild(opt);
+  });
+
+  const nameInput = document.createElement('input');
+  nameInput.className = 'item-edit-input';
+  nameInput.type = 'text';
+  nameInput.value = item.name;
+  nameInput.maxLength = 80;
+
+  badge.replaceWith(catSelect);
+  nameEl.replaceWith(nameInput);
+  nameInput.focus();
+  nameInput.select();
 
   let saved = false;
   const save = async () => {
     if (saved) return;
     saved = true;
-    const newName = input.value.trim();
-    if (newName && newName !== item.name) {
+    const newName = nameInput.value.trim();
+    const newCat = catSelect.value;
+    if (newName && (newName !== item.name || newCat !== item.category)) {
       item.name = newName;
+      item.category = newCat;
       await dbPut(item);
     }
     render();
   };
 
-  input.addEventListener('keydown', e => {
+  const handleBlur = () => {
+    setTimeout(() => {
+      if (document.activeElement !== nameInput && document.activeElement !== catSelect) {
+        save();
+      }
+    }, 0);
+  };
+
+  nameInput.addEventListener('keydown', e => {
     if (e.key === 'Enter') { e.preventDefault(); save(); }
     if (e.key === 'Escape') { saved = true; render(); }
   });
-  input.addEventListener('blur', save);
+  catSelect.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); save(); }
+    if (e.key === 'Escape') { saved = true; render(); }
+  });
+  nameInput.addEventListener('blur', handleBlur);
+  catSelect.addEventListener('blur', handleBlur);
 }
 
 async function toggleCheck(id) {
