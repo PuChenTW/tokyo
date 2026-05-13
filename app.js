@@ -249,3 +249,108 @@ function toggleNight() {
     if (b) b.textContent = '☀️';
   }
 })();
+
+// ─── Data export / import ────────────────────────────────────────────────────
+
+function _idbGetAll(dbName) {
+  return new Promise((res, rej) => {
+    const r = indexedDB.open(dbName, 1);
+    r.onupgradeneeded = e => {
+      if (!e.target.result.objectStoreNames.contains('items'))
+        e.target.result.createObjectStore('items', { keyPath: 'id', autoIncrement: true });
+    };
+    r.onsuccess = e => {
+      const req = e.target.result.transaction('items', 'readonly').objectStore('items').getAll();
+      req.onsuccess = ev => res(ev.target.result);
+      req.onerror = ev => rej(ev.target.error);
+    };
+    r.onerror = e => rej(e.target.error);
+  });
+}
+
+function _idbReplaceAll(dbName, items) {
+  return new Promise((res, rej) => {
+    const r = indexedDB.open(dbName, 1);
+    r.onupgradeneeded = e => {
+      if (!e.target.result.objectStoreNames.contains('items'))
+        e.target.result.createObjectStore('items', { keyPath: 'id', autoIncrement: true });
+    };
+    r.onsuccess = e => {
+      const tx = e.target.result.transaction('items', 'readwrite');
+      const store = tx.objectStore('items');
+      store.clear();
+      items.forEach(item => store.put(item));
+      tx.oncomplete = () => res();
+      tx.onerror = ev => rej(ev.target.error);
+    };
+    r.onerror = e => rej(e.target.error);
+  });
+}
+
+async function _exportData() {
+  const itinerary = window.__itineraryDays
+    || JSON.parse(localStorage.getItem('tokyo-itinerary') || 'null');
+  const [shopping, luggage] = await Promise.all([
+    _idbGetAll('tokyo-shopping'),
+    _idbGetAll('tokyo-luggage'),
+  ]);
+  const payload = { version: 1, exportedAt: new Date().toISOString() };
+  if (itinerary) payload.itinerary = itinerary;
+  payload.shopping = shopping;
+  payload.luggage = luggage;
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'tokyo-trip-export.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+async function _importData(file) {
+  let payload;
+  try { payload = JSON.parse(await file.text()); }
+  catch { alert('匯入失敗：JSON 格式無效'); return; }
+  if (typeof payload !== 'object' || payload === null) {
+    alert('匯入失敗：資料格式錯誤');
+    return;
+  }
+  if (Array.isArray(payload.itinerary))
+    localStorage.setItem('tokyo-itinerary', JSON.stringify(payload.itinerary));
+  if (Array.isArray(payload.shopping))
+    await _idbReplaceAll('tokyo-shopping', payload.shopping);
+  if (Array.isArray(payload.luggage))
+    await _idbReplaceAll('tokyo-luggage', payload.luggage);
+  location.reload();
+}
+
+function initDataControls() {
+  const navDiv = document.querySelector('.hinner > div:last-child');
+  if (!navDiv) return;
+  const nmBtn = document.getElementById('nm-btn');
+
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = '.json,application/json';
+  fileInput.style.display = 'none';
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files[0]) _importData(fileInput.files[0]);
+    fileInput.value = '';
+  });
+
+  const exportBtn = document.createElement('button');
+  exportBtn.className = 'nm-btn';
+  exportBtn.title = '匯出所有資料為 JSON';
+  exportBtn.textContent = '⬇ 匯出';
+  exportBtn.addEventListener('click', _exportData);
+
+  const importBtn = document.createElement('button');
+  importBtn.className = 'nm-btn';
+  importBtn.title = '從 JSON 檔匯入資料';
+  importBtn.textContent = '⬆ 匯入';
+  importBtn.addEventListener('click', () => fileInput.click());
+
+  navDiv.insertBefore(exportBtn, nmBtn);
+  navDiv.insertBefore(importBtn, nmBtn);
+  document.body.appendChild(fileInput);
+}
