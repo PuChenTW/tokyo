@@ -62,6 +62,13 @@ main{max-width:640px;margin:0 auto;padding:16px 12px;display:flex;flex-direction
 .nm-btn{background:none;border:1px solid #e2e8f0;border-radius:8px;padding:5px 9px;cursor:pointer;font-size:15px;line-height:1;color:#475569;transition:background .15s,border-color .15s}
 .nm-btn:hover{background:#f1f5f9;border-color:#cbd5e1}
 
+.data-ctrl-bar{display:flex;gap:8px;justify-content:flex-end;padding:0 0 4px}
+.data-ctrl-btn{font-size:13px !important;padding:5px 11px !important;color:#64748b !important}
+.data-ctrl-btn:hover{color:#0d9488 !important;border-color:#99f6e4 !important;background:#f0fdfa !important}
+
+[data-dark] .data-ctrl-btn{color:#475569 !important;border-color:#334155 !important}
+[data-dark] .data-ctrl-btn:hover{color:#2dd4bf !important;border-color:#0d9488 !important;background:#134e4a !important}
+
 [data-dark] body{background:#0f172a;color:#e2e8f0}
 [data-dark] header{background:#1e293b;border-color:#334155;box-shadow:0 1px 3px rgba(0,0,0,.3)}
 [data-dark] .htitle{color:#f1f5f9}
