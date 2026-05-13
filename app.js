@@ -325,9 +325,8 @@ async function _importData(file) {
 }
 
 function initDataControls() {
-  const navDiv = document.querySelector('.hinner > div:last-child');
-  if (!navDiv) return;
-  const nmBtn = document.getElementById('nm-btn');
+  const mainEl = document.querySelector('main');
+  if (!mainEl) return;
 
   const fileInput = document.createElement('input');
   fileInput.type = 'file';
@@ -339,18 +338,22 @@ function initDataControls() {
   });
 
   const exportBtn = document.createElement('button');
-  exportBtn.className = 'nm-btn';
-  exportBtn.title = '匯出所有資料為 JSON';
-  exportBtn.textContent = '⬇ 匯出';
+  exportBtn.className = 'nm-btn data-ctrl-btn';
+  exportBtn.title = '匯出行程、購物、行李為 JSON';
+  exportBtn.textContent = '⬇ 匯出資料';
   exportBtn.addEventListener('click', _exportData);
 
   const importBtn = document.createElement('button');
-  importBtn.className = 'nm-btn';
+  importBtn.className = 'nm-btn data-ctrl-btn';
   importBtn.title = '從 JSON 檔匯入資料';
-  importBtn.textContent = '⬆ 匯入';
+  importBtn.textContent = '⬆ 匯入資料';
   importBtn.addEventListener('click', () => fileInput.click());
 
-  navDiv.insertBefore(exportBtn, nmBtn);
-  navDiv.insertBefore(importBtn, nmBtn);
+  const bar = document.createElement('div');
+  bar.className = 'data-ctrl-bar';
+  bar.appendChild(exportBtn);
+  bar.appendChild(importBtn);
+
+  mainEl.insertBefore(bar, mainEl.firstChild);
   document.body.appendChild(fileInput);
 }
