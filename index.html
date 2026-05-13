@@ -267,6 +267,7 @@ const days = [
     ]
   }
 ];
+window.__itineraryDays = days;
 
 const ICONS = {
   flight:"✈️", drive:"🚗", hotel:"🛏️", food:"🍽️",
@@ -275,9 +276,10 @@ const ICONS = {
 };
 
 function renderDays(){
+  const _days = JSON.parse(localStorage.getItem('tokyo-itinerary') || 'null') || days;
   const main = document.getElementById('main');
   main.innerHTML = '';
-  days.forEach(day => {
+  _days.forEach(day => {
     const card = document.createElement('div');
     card.className = 'day-card';
     card.id = `day-${day.id}`;
@@ -380,6 +382,7 @@ function toggleExtra(id){
 // Footer
 document.addEventListener('DOMContentLoaded', ()=>{
   renderDays();
+  initDataControls();
   const footer = document.createElement('p');
   footer.className='footer';
   footer.textContent='所有 Google Maps 連結點擊後在新分頁開啟。各店實際營業時間建議出發前再次確認。';
