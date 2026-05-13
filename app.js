@@ -252,6 +252,13 @@ function toggleNight() {
 
 // ─── Data export / import ────────────────────────────────────────────────────
 
+function _detectPage() {
+  const path = window.location.pathname;
+  if (path.endsWith('shopping.html')) return 'shopping';
+  if (path.endsWith('luggage.html')) return 'luggage';
+  return 'itinerary';
+}
+
 function _idbGetAll(dbName) {
   return new Promise((res, rej) => {
     const r = indexedDB.open(dbName, 1);
@@ -288,21 +295,28 @@ function _idbReplaceAll(dbName, items) {
 }
 
 async function _exportData() {
-  const itinerary = window.__itineraryDays
-    || JSON.parse(localStorage.getItem('tokyo-itinerary') || 'null');
-  const [shopping, luggage] = await Promise.all([
-    _idbGetAll('tokyo-shopping'),
-    _idbGetAll('tokyo-luggage'),
-  ]);
+  const page = _detectPage();
   const payload = { version: 1, exportedAt: new Date().toISOString() };
-  if (itinerary) payload.itinerary = itinerary;
-  payload.shopping = shopping;
-  payload.luggage = luggage;
+  let filename;
+
+  if (page === 'itinerary') {
+    const itinerary = window.__itineraryDays
+      || JSON.parse(localStorage.getItem('tokyo-itinerary') || 'null');
+    if (itinerary) payload.itinerary = itinerary;
+    filename = 'tokyo-itinerary-export.json';
+  } else if (page === 'shopping') {
+    payload.shopping = await _idbGetAll('tokyo-shopping');
+    filename = 'tokyo-shopping-export.json';
+  } else {
+    payload.luggage = await _idbGetAll('tokyo-luggage');
+    filename = 'tokyo-luggage-export.json';
+  }
+
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'tokyo-trip-export.json';
+  a.download = filename;
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -315,12 +329,32 @@ async function _importData(file) {
     alert('匯入失敗：資料格式錯誤');
     return;
   }
-  if (Array.isArray(payload.itinerary))
+
+  const page = _detectPage();
+  if (page === 'itinerary') {
+    if (!Array.isArray(payload.itinerary)) { alert('匯入失敗：此檔案不包含行程資料'); return; }
     localStorage.setItem('tokyo-itinerary', JSON.stringify(payload.itinerary));
-  if (Array.isArray(payload.shopping))
+  } else if (page === 'shopping') {
+    if (!Array.isArray(payload.shopping)) { alert('匯入失敗：此檔案不包含購物清單資料'); return; }
     await _idbReplaceAll('tokyo-shopping', payload.shopping);
-  if (Array.isArray(payload.luggage))
+  } else {
+    if (!Array.isArray(payload.luggage)) { alert('匯入失敗：此檔案不包含行李清單資料'); return; }
     await _idbReplaceAll('tokyo-luggage', payload.luggage);
+  }
+  location.reload();
+}
+
+async function _resetData() {
+  const page = _detectPage();
+  const labels = { itinerary: '行程', shopping: '購物清單', luggage: '行李清單' };
+  if (!confirm(`確定要重置${labels[page]}回預設值？此操作無法復原。`)) return;
+
+  if (page === 'itinerary')
+    localStorage.removeItem('tokyo-itinerary');
+  else if (page === 'shopping')
+    await _idbReplaceAll('tokyo-shopping', []);
+  else
+    await _idbReplaceAll('tokyo-luggage', []);
   location.reload();
 }
 
@@ -339,20 +373,27 @@ function initDataControls() {
 
   const exportBtn = document.createElement('button');
   exportBtn.className = 'nm-btn data-ctrl-btn';
-  exportBtn.title = '匯出行程、購物、行李為 JSON';
-  exportBtn.textContent = '⬇ 匯出資料';
+  exportBtn.title = '匯出本頁資料為 JSON';
+  exportBtn.textContent = '⬇ 匯出';
   exportBtn.addEventListener('click', _exportData);
 
   const importBtn = document.createElement('button');
   importBtn.className = 'nm-btn data-ctrl-btn';
-  importBtn.title = '從 JSON 檔匯入資料';
-  importBtn.textContent = '⬆ 匯入資料';
+  importBtn.title = '從 JSON 檔匯入本頁資料';
+  importBtn.textContent = '⬆ 匯入';
   importBtn.addEventListener('click', () => fileInput.click());
+
+  const resetBtn = document.createElement('button');
+  resetBtn.className = 'nm-btn data-ctrl-btn data-ctrl-btn--reset';
+  resetBtn.title = '清空本頁資料，重置為預設值';
+  resetBtn.textContent = '↺ 重置';
+  resetBtn.addEventListener('click', _resetData);
 
   const bar = document.createElement('div');
   bar.className = 'data-ctrl-bar';
   bar.appendChild(exportBtn);
   bar.appendChild(importBtn);
+  bar.appendChild(resetBtn);
 
   mainEl.insertBefore(bar, mainEl.firstChild);
   document.body.appendChild(fileInput);
